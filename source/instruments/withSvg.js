@@ -5,10 +5,7 @@ import { number } from 'prop-types';
 // Instruments
 import { getDisplayName } from './';
 
-const decorateSvg = (
-    { viewBoxWidth = 0, viewBoxHeight = 0, width = 0, height = 0} = {},
-    Enhanceable,
-) => {
+const decorateSvg = ({ viewBoxWidth = 0, viewBoxHeight = 0, width = 0, height = 0 } = {}, Enhanceable) => {
     class withSvg extends Component {
         static propTypes = {
             height: number.isRequired,

@@ -13,41 +13,62 @@ import { v4 } from 'uuid';
 // ! Импорт модуля API должен иметь именно такой вид (import { api } from '../../REST')
 import { api } from '../../REST';
 
-const data = [
-    {
-        "id":        "5a7f136231a5d90001271637",
-        "message":   "Hello Andrey!",
-        "completed": true,
-        "favorite":  false,
-        "created":   "2018-02-10T15:44:34.624Z",
-        "modified":  "2018-02-10T16:01:12.406Z",
-    },
-    {
-        "id":        "5a7f136131a5d90001271636",
-        "message":   "Hello",
-        "completed": false,
-        "favorite":  true,
-        "created":   "2018-02-10T15:44:33.675Z",
-    },
-    {
-        "id":        "5a7f136031a5d90001271635",
-        "message":   "Hello",
-        "completed": false,
-        "favorite":  false,
-        "created":   "2018-02-10T15:44:32.959Z",
-    }
-];
-
 export default class Scheduler extends Component {
     state = {
         newTaskMessage:  '',
         tasksFilter:     '',
-        isTasksFetching: true,
-        tasks:           data,
+        isTasksFetching: false,
+        tasks:           [],
+    };
+
+    componentDidMount () {
+        this._setTasksFetchingState(true);
+        this._asyncFetchTask();
+    }
+
+    _setTasksFetchingState = (state) => {
+        this.setState({
+            isTasksFetching: state,
+        });
+    };
+
+    // Асинхронные запросы
+    _asyncFetchTask = async () => {
+        const tasks = await api.fetchTasks();
+
+        console.log(tasks);
+        this.setState({
+            tasks,
+            isTasksFetching: false,
+        });
+    };
+
+    _asyncAddTask = async (event) => {
+        event.preventDefault();
+        const { newTaskMessage } = this.state;
+
+        this._setTasksFetchingState(true);
+        const task = await api.createTask(newTaskMessage);
+
+        this.setState(({ tasks }) => ({
+            tasks:           [...tasks, task],
+            isTasksFetching: false,
+        }));
+    };
+
+    _asyncRemoveTask = async (id) => {
+        this._setTasksFetchingState(true);
+        console.log(id);
+        await api.removeTask(id);
+
+        this.setState(({ tasks }) => ({
+            tasks:           tasks.filter((el) => el.id !== id),
+            isTasksFetching: false,
+        }));
+
     };
 
     _changeTaskCompletedState = (id) => {
-
         this.setState(({ tasks }) => ({
             tasks: tasks.map((el) => {
                 if (el.id !== id) {
@@ -78,7 +99,11 @@ export default class Scheduler extends Component {
         }));
 
     };
-    _checkAllTasksCompleted = () => this.state.tasks.every((task) => task.completed);
+
+    _checkAllTasksCompleted = () =>
+        this.state.tasks.length !== 0 && this.state.tasks.every((task) => task.completed)
+
+    ;
 
     _checkedAllTasks = () => {
         this.setState(({ tasks }) => ({
@@ -91,24 +116,6 @@ export default class Scheduler extends Component {
         this.setState({
             newTaskMessage: event.target.value,
         });
-    };
-
-    _addNewTaskMessage = (event) => {
-        event.preventDefault();
-
-        const { newTaskMessage } = this.state;
-
-        const task = {
-            id:        v4(),
-            completed: false,
-            favorite:  false,
-            message:   newTaskMessage,
-        };
-
-        this.setState(({ tasks }) => ({
-            tasks: [...tasks, task ],
-        }));
-
     };
 
     render () {
@@ -125,7 +132,7 @@ export default class Scheduler extends Component {
                 { ...el }
                 _changeTaskCompletedState = { this._changeTaskCompletedState }
                 _changeTaskFavoriteState = { this._changeTaskFavoriteState }
-                _removeTask = { this._removeTask }
+                _removeTask = { this._asyncRemoveTask }
             />));
 
         const allTasksCompleted = this._checkAllTasksCompleted();
@@ -139,9 +146,9 @@ export default class Scheduler extends Component {
                         <input placeholder = 'Поиск' type = 'search' />
                     </header>
                     <section>
-                        <form onSubmit = { this._addNewTaskMessage }>
+                        <form onSubmit = { this._asyncAddTask }>
                             <input
-                                maxLength = '5'
+                                maxLength = '50'
                                 placeholder = 'Описание задачи'
                                 type = 'text'
                                 value = { newTaskMessage }

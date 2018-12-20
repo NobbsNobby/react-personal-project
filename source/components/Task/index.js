@@ -78,7 +78,7 @@ export default class Task extends PureComponent {
                 />
                 <input
                     disabled = { !isTaskEditing }
-                    maxLength = '5'
+                    maxLength = '50'
                     type = 'text'
                     value = { message }
                 />
