@@ -6,7 +6,7 @@ import { number } from 'prop-types';
 import { getDisplayName } from './';
 
 const decorateSvg = (
-    { viewBoxWidth = 0, viewBoxHeight = 0, width = 0, height = 0 } = {},
+    { viewBoxWidth = 0, viewBoxHeight = 0, width = 0, height = 0} = {},
     Enhanceable,
 ) => {
     class withSvg extends Component {
