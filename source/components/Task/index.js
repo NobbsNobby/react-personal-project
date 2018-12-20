@@ -8,8 +8,7 @@ import Edit from 'theme/assets/Edit';
 import Remove from 'theme/assets/Remove';
 // Instruments
 import Styles from './styles.m.css';
-import classNames from 'classnames';
-
+import cx from 'classnames';
 
 export default class Task extends PureComponent {
     state = {
@@ -53,13 +52,19 @@ export default class Task extends PureComponent {
         const { _changeTaskFavoriteState, id } = this.props;
 
         _changeTaskFavoriteState(id);
-    }
+    };
+
+    _removeTask = () => {
+        const { _removeTask, id } = this.props;
+
+        _removeTask(id);
+    };
 
     render () {
         const { message, completed, favorite } = this.props;
         const { isTaskEditing } = this.state;
 
-        const completedClass = classNames(Styles.task, { [Styles.completed]: completed });
+        const completedClass = cx(Styles.task, { [Styles.completed]: completed });
 
         return (<li className = { completedClass }>
             <div className = { Styles.content }>
@@ -73,6 +78,7 @@ export default class Task extends PureComponent {
                 />
                 <input
                     disabled = { !isTaskEditing }
+                    maxLength = '5'
                     type = 'text'
                     value = { message }
                 />
@@ -98,6 +104,7 @@ export default class Task extends PureComponent {
                     inlineBlock
                     color1 = '#3B8EF3'
                     color2 = '#000'
+                    onClick = { this._removeTask }
                 />
             </div>
         </li>);
