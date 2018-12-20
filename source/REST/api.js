@@ -34,14 +34,14 @@ export const api = {
 
         return data;
     },
-    async updateTask (message) {
+    async updateTask (tasks) {
         const response = await fetch(MAIN_URL, {
             method:  'PUT',
             headers: {
                 Authorization:  TOKEN,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify([message]),
+            body: JSON.stringify([tasks]),
         });
 
         const { data } = await response.json();

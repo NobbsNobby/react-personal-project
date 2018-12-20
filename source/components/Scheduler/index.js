@@ -58,11 +58,26 @@ export default class Scheduler extends Component {
 
     _asyncRemoveTask = async (id) => {
         this._setTasksFetchingState(true);
-        console.log(id);
         await api.removeTask(id);
 
         this.setState(({ tasks }) => ({
             tasks:           tasks.filter((el) => el.id !== id),
+            isTasksFetching: false,
+        }));
+
+    };
+
+    _asyncUpdateTasks = async (updateTask) => {
+        this._setTasksFetchingState(true);
+        const tasksData = await api.updateTask(updateTask);
+
+        this.setState(({ tasks }) => ({
+            tasks: tasks.map((task) => {
+                const el = taskData.find((taskDataEl) => task.id === taskDataEl.id);
+
+                return el ? el : task;
+
+            }),
             isTasksFetching: false,
         }));
 
@@ -130,8 +145,8 @@ export default class Scheduler extends Component {
             <Task
                 key = { el.id }
                 { ...el }
-                _changeTaskCompletedState = { this._changeTaskCompletedState }
-                _changeTaskFavoriteState = { this._changeTaskFavoriteState }
+                _changeTaskCompletedState = { this._asyncUpdateTasks }
+                _changeTaskFavoriteState = { this._asyncUpdateTasks }
                 _removeTask = { this._asyncRemoveTask }
             />));
 

@@ -43,15 +43,15 @@ export default class Task extends PureComponent {
     };
 
     _changeTaskCompletedState = () => {
-        const { _changeTaskCompletedState, id } = this.props;
+        const { _changeTaskCompletedState, completed } = this.props;
 
-        _changeTaskCompletedState(id);
+        _changeTaskCompletedState(this._getTaskShape({ completed: !completed }));
     };
 
     _changeTaskFavoriteState = () => {
-        const { _changeTaskFavoriteState, id } = this.props;
+        const { _changeTaskFavoriteState, favorite } = this.props;
 
-        _changeTaskFavoriteState(id);
+        _changeTaskFavoriteState(this._getTaskShape({ favorite: !favorite }));
     };
 
     _removeTask = () => {
