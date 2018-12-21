@@ -5,19 +5,20 @@ exports[`Компонент Scheduler: должен иметь базовую р
   <section
     className="scheduler"
   >
-    <Spinner
-      isSpinning={true}
-    >
-      <div
-        className="spinner"
-      />
-    </Spinner>
     <main>
+      <Spinner
+        isSpinning={true}
+      >
+        <div
+          className="spinner"
+        />
+      </Spinner>
       <header>
         <h1>
           Планировщик задач
         </h1>
         <input
+          maxLength="50"
           onChange={[MockFunction]}
           placeholder="Поиск"
           type="search"
@@ -29,10 +30,9 @@ exports[`Компонент Scheduler: должен иметь базовую р
           onSubmit={[MockFunction]}
         >
           <input
-            className="createTask"
             maxLength={50}
             onChange={[MockFunction]}
-            placeholder="Описaние моей новой задачи"
+            placeholder="Описание задачи"
             type="text"
             value=""
           />
@@ -40,14 +40,12 @@ exports[`Компонент Scheduler: должен иметь базовую р
             Добавить задачу
           </button>
         </form>
-        <div
-          className="overlay"
-        >
+        <div>
           <ul>
             <FlipMovePropConverter
               delay={0}
               disableAllAnimations={false}
-              duration={400}
+              duration={350}
               easing="ease-in-out"
               enterAnimation="elevator"
               getPosition={[Function]}
@@ -68,7 +66,7 @@ exports[`Компонент Scheduler: должен иметь базовую р
                   }
                 }
                 disableAllAnimations={false}
-                duration={400}
+                duration={350}
                 easing="ease-in-out"
                 enterAnimation={
                   Object {
@@ -193,7 +191,7 @@ exports[`Компонент Scheduler: должен иметь базовую р
                         </withSvg(Checkbox)>
                         <input
                           disabled={true}
-                          maxLength={50}
+                          maxLength="50"
                           onChange={[Function]}
                           onKeyDown={[Function]}
                           type="text"
@@ -437,7 +435,7 @@ exports[`Компонент Scheduler: должен иметь базовую р
         <span
           className="completeAllTasks"
         >
-          Все задачи выполнены
+          Выполнить все задачи
         </span>
       </footer>
     </main>
