@@ -36,7 +36,6 @@ export default class Scheduler extends Component {
     _asyncFetchTask = async () => {
         const tasks = await api.fetchTasks();
 
-        console.log(tasks);
         this.setState({
             tasks,
             isTasksFetching: false,
@@ -58,6 +57,7 @@ export default class Scheduler extends Component {
 
     _asyncRemoveTask = async (id) => {
         this._setTasksFetchingState(true);
+
         await api.removeTask(id);
 
         this.setState(({ tasks }) => ({
@@ -68,17 +68,29 @@ export default class Scheduler extends Component {
     };
 
     _asyncUpdateTasks = async (updateTask) => {
-        this._setTasksFetchingState(true);
         const tasksData = await api.updateTask(updateTask);
+
+        this._setTasksFetchingState(true);
 
         this.setState(({ tasks }) => ({
             tasks: tasks.map((task) => {
-                const el = taskData.find((taskDataEl) => task.id === taskDataEl.id);
+                const el = tasksData.find((taskDataEl) => task.id === taskDataEl.id);
 
                 return el ? el : task;
 
             }),
             isTasksFetching: false,
+        }));
+
+    };
+
+    _asyncCheckedAllTasks = async () => {
+        const completedTasks = this.state.tasks.map((el) => ({ ...el, completed: true }));
+
+        await api.completeAllTasks(completedTasks);
+
+        this.setState(({ tasks }) => ({
+            tasks: tasks.map((el) => ({ ...el, completed: true })),
         }));
 
     };
@@ -96,7 +108,6 @@ export default class Scheduler extends Component {
     };
 
     _changeTaskFavoriteState = (id) => {
-
         this.setState(({ tasks }) => ({
             tasks: tasks.map((el) => {
                 if (el.id !== id) {
@@ -119,13 +130,6 @@ export default class Scheduler extends Component {
         this.state.tasks.length !== 0 && this.state.tasks.every((task) => task.completed)
 
     ;
-
-    _checkedAllTasks = () => {
-        this.setState(({ tasks }) => ({
-            tasks: tasks.map((el) => ({ ...el, completed: true })),
-        }));
-
-    };
 
     _changeNewTaskMessage = (event) => {
         this.setState({
@@ -182,7 +186,7 @@ export default class Scheduler extends Component {
                             checked = { allTasksCompleted }
                             color1 = '#363636'
                             color2 = '#fff'
-                            onClick = { this._checkedAllTasks }
+                            onClick = { this._asyncCheckedAllTasks }
                         />
                         <span className = { Styles.completeAllTasks }>Выполнить все задачи</span>
                     </footer>

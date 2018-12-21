@@ -64,4 +64,27 @@ export const api = {
             throw new Error(response.statusText);
         }
     },
+    async completeAllTasks (tasks) {
+        const fetchArr = [];
+
+        for (const item of tasks) {
+            fetchArr.push(
+                fetch(MAIN_URL, {
+                    method:  'PUT',
+                    headers: {
+                        Authorization:  TOKEN,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify([item]),
+                })
+            );
+        }
+
+        const responses = await Promise.all(fetchArr);
+        const done = responses.every((response) => response.status === 200);
+
+        if (!done) {
+            throw new Error('crash completed all tasks');
+        }
+    },
 };
