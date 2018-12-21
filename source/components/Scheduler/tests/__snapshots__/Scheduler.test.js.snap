@@ -18,7 +18,7 @@ exports[`Компонент Scheduler: должен иметь базовую р
           Планировщик задач
         </h1>
         <input
-          maxLength="50"
+          maxLength={50}
           onChange={[MockFunction]}
           placeholder="Поиск"
           type="search"
@@ -191,7 +191,7 @@ exports[`Компонент Scheduler: должен иметь базовую р
                         </withSvg(Checkbox)>
                         <input
                           disabled={true}
-                          maxLength="50"
+                          maxLength={50}
                           onChange={[Function]}
                           onKeyDown={[Function]}
                           type="text"

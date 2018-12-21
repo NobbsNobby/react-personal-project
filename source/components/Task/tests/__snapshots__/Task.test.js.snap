@@ -87,7 +87,7 @@ exports[` 1`] = `
       </withSvg(Checkbox)>
       <input
         disabled={true}
-        maxLength="50"
+        maxLength={50}
         onChange={[Function]}
         onKeyDown={[Function]}
         type="text"
