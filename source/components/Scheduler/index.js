@@ -62,11 +62,10 @@ export default class Scheduler extends Component {
   _createTaskAsync = async (event) => {
       const { newTaskMessage } = this.state;
 
+      event.preventDefault();
       if (!newTaskMessage.trim()) {
           return null;
       }
-
-      event.preventDefault();
 
       this._setTasksFetchingState(true);
 
