@@ -115,7 +115,7 @@ export default class Scheduler extends Component {
             await api.removeTask(id);
 
             this.setState(({ tasks }) => ({
-                tasks: tasks.filter((el) => el.id !== id),
+                tasks: tasks.filter((task) => task.id !== id),
             }));
         } catch (e) {
             console.log(e.message);
@@ -134,7 +134,7 @@ export default class Scheduler extends Component {
             await api.completeAllTasks(this.state.tasks);
 
             this.setState(({ tasks }) => ({
-                tasks: tasks.map((el) => ({ ...el, completed: true })),
+                tasks: tasks.map((task) => ({ ...task, completed: true })),
             }));
         } catch (e) {
             console.log(e.message);
@@ -145,7 +145,7 @@ export default class Scheduler extends Component {
 
     _removeTask = (id) => {
         this.setState(({ tasks }) => ({
-            tasks: tasks.filter((el) => el.id !== id),
+            tasks: tasks.filter((task) => task.id !== id),
         }));
     };
 
